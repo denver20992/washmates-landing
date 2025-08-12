@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Check, Calendar, Clock, DollarSign, Home as HomeIcon, Sparkles, Truck, TrendingUp, Users } from 'lucide-react'
+import { Check, Calendar, Clock, DollarSign, Home as HomeIcon, Sparkles, Truck, TrendingUp, Users, Facebook, Instagram, Twitter } from 'lucide-react'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -406,6 +406,34 @@ export default function Home() {
               className="h-16 w-auto mx-auto brightness-0 invert opacity-90"
             />
           </div>
+          
+          {/* Social Media Links */}
+          <div className="flex justify-center space-x-6 mb-6">
+            <a 
+              href="https://www.facebook.com/61575342231245/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-washmates-gold transition-colors"
+              aria-label="Follow us on Facebook"
+            >
+              <Facebook className="w-6 h-6" />
+            </a>
+            <a 
+              href="#" 
+              className="hover:text-washmates-gold transition-colors opacity-50 cursor-not-allowed"
+              aria-label="Instagram coming soon"
+            >
+              <Instagram className="w-6 h-6" />
+            </a>
+            <a 
+              href="#" 
+              className="hover:text-washmates-gold transition-colors opacity-50 cursor-not-allowed"
+              aria-label="Twitter coming soon"
+            >
+              <Twitter className="w-6 h-6" />
+            </a>
+          </div>
+          
           <p className="text-gray-300 mb-2">© 2025 WashMates. All rights reserved.</p>
           <p className="text-gray-400 text-sm">Proudly serving the Greater Toronto Area</p>
         </div>
