@@ -86,10 +86,16 @@ export default function Home() {
                 Launching Soon in GTA
               </div>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="gradient-text">No More</span><br/>
-              <span className="text-washmates-gold">Laundry Fuss</span>
-            </h1>
+            <div className="mb-6">
+              <Image 
+                src="/images/app-icon.png" 
+                alt="WashMates - No More Laundry Fuss" 
+                width={320} 
+                height={320} 
+                className="mx-auto w-48 md:w-64 lg:w-80 h-auto"
+                priority
+              />
+            </div>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Professional laundry pickup & delivery service connecting neighbours in the Greater Toronto Area
             </p>
