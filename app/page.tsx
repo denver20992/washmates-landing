@@ -15,26 +15,37 @@ export default function Home() {
     setIsSubmitting(true)
 
     try {
-      // TODO: Integrate with Supabase
-      // const { data, error } = await supabase
-      //   .from('waitlist')
-      //   .insert([{ 
-      //     email, 
-      //     user_type: userType, 
-      //     created_at: new Date().toISOString() 
-      //   }])
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          userType,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
       
-      // For now, just simulate success
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Store waitlist position if available
+      if (data.waitlistPosition) {
+        localStorage.setItem('waitlistPosition', data.waitlistPosition)
+      }
       
       setShowSuccess(true)
       setEmail('')
       
       setTimeout(() => {
         setShowSuccess(false)
-      }, 5000)
+      }, 8000) // Show success longer to read position
     } catch (error) {
       console.error('Error submitting to waitlist:', error)
+      alert(error instanceof Error ? error.message : 'Failed to join waitlist. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
