@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { addToWaitlist } from '@/lib/supabase'
+import { addToWaitlistSimple } from '@/lib/supabase-simple'
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,8 +33,6 @@ export async function POST(request: NextRequest) {
 
     // Get metadata from request
     const metadata = {
-      ip_address: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
-      user_agent: request.headers.get('user-agent') || undefined,
       referrer: request.headers.get('referer') || undefined,
       utm_source: new URL(request.url).searchParams.get('utm_source') || undefined,
       utm_medium: new URL(request.url).searchParams.get('utm_medium') || undefined,
@@ -42,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Add to waitlist (handles both new and existing users)
-    const result = await addToWaitlist(email, userType, metadata)
+    const result = await addToWaitlistSimple(email, userType, metadata)
 
     if (!result.success) {
       return NextResponse.json(
@@ -51,19 +49,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Parse the response from stored procedure
-    const data = result.data as any
-    const isNew = data?.is_new || false
-    const waitlistPosition = data?.waitlist_position || null
+    // Parse the response from simple function
+    const isNew = result.isNew || false
+    const message = result.message || 'Successfully added to waitlist!'
 
     return NextResponse.json({
       success: true,
-      message: isNew 
-        ? `Welcome to the waitlist! You're #${waitlistPosition} in line.`
-        : 'Welcome back! We already have you on the list.',
-      isNew,
-      waitlistPosition,
-      userId: data?.user_id
+      message,
+      isNew
     })
 
   } catch (error) {
@@ -87,12 +80,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { checkEmailExists } = await import('@/lib/supabase')
-    const result = await checkEmailExists(email)
+    const { checkEmailExists } = await import('@/lib/supabase-simple')
+    const exists = await checkEmailExists(email)
 
     return NextResponse.json({
-      exists: result.exists,
-      error: result.error
+      exists
     })
 
   } catch (error) {
